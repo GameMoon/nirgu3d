@@ -37,7 +37,8 @@
  */
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
-#define CONFIGURATION_H_VERSION 010109
+#define CONFIGURATION_H_VERSION 020007
+
 
 //===========================================================================
 //============================= Getting Started =============================
@@ -76,8 +77,6 @@
 // build by the user have been successfully uploaded into firmware.
 #define STRING_CONFIG_H_AUTHOR "(none, default config)" // Who made the changes.
 #define SHOW_BOOTSCREEN
-#define STRING_SPLASH_LINE1 SHORT_BUILD_VERSION // will be shown during bootup in line 1
-#define STRING_SPLASH_LINE2 WEBSITE_URL         // will be shown during bootup in line 2
 
 /**
  * *** VENDORS PLEASE READ ***
@@ -231,12 +230,13 @@
  *
  * :{ 0:'No power switch', 1:'ATX', 2:'X-Box 360' }
  */
-#define POWER_SUPPLY 1
+#define PSU_CONTROL
 
-#if POWER_SUPPLY > 0
+#if ENABLED(PSU_CONTROL)
   // Enable this option to leave the PSU off at startup.
   // Power to steppers and heaters will need to be turned on with M80.
   //#define PS_DEFAULT_OFF
+  #define PSU_ACTIVE_STATE LOW
 
   //#define AUTO_POWER_CONTROL        // Enable automatic control of the PS_ON pin
   #if ENABLED(AUTO_POWER_CONTROL)
@@ -769,8 +769,8 @@
  *   X and Y offsets must be integers.
  *
  *   In the following example the X and Y offsets are both positive:
- *   #define X_PROBE_OFFSET_FROM_EXTRUDER 10
- *   #define Y_PROBE_OFFSET_FROM_EXTRUDER 10
+ *   #define X_NOZZLE_TO_PROBE_OFFSET 10
+ *   #define Y_NOZZLE_TO_PROBE_OFFSET 10
  *
  *      +-- BACK ---+
  *      |           |
@@ -783,14 +783,14 @@
  *      O-- FRONT --+
  *    (0,0)
  */
-#define X_PROBE_OFFSET_FROM_EXTRUDER -28  // X offset: -left  +right  [of the nozzle]
-#define Y_PROBE_OFFSET_FROM_EXTRUDER -51  // Y offset: -front +behind [the nozzle]
-//#define Z_PROBE_OFFSET_FROM_EXTRUDER -1.55   // Z offset: -below +above  [the nozzle]
-//#define Z_PROBE_OFFSET_FROM_EXTRUDER -0.55   // Z offset: -below +above  [the nozzle]
-#define Z_PROBE_OFFSET_FROM_EXTRUDER -1.20   // Z offset: -below +above  [the nozzle]
+#define X_NOZZLE_TO_PROBE_OFFSET -28  // X offset: -left  +right  [of the nozzle]
+#define Y_NOZZLE_TO_PROBE_OFFSET -51  // Y offset: -front +behind [the nozzle]
+//#define Z_NOZZLE_TO_PROBE_OFFSET -1.55   // Z offset: -below +above  [the nozzle]
+//#define Z_NOZZLE_TO_PROBE_OFFSET -0.55   // Z offset: -below +above  [the nozzle]
+#define Z_NOZZLE_TO_PROBE_OFFSET -1.20   // Z offset: -below +above  [the nozzle]
 
 // Certain types of probes need to stay away from edges
-#define MIN_PROBE_EDGE 10
+#define PROBING_MARGIN 10
 
 // X and Y axis travel speed (mm/m) between probes
 #define XY_PROBE_SPEED 8000
@@ -814,7 +814,7 @@
  *
  * Use these settings to specify the distance (mm) to raise the probe (or
  * lower the bed). The values set here apply over and above any (negative)
- * probe Z Offset set with Z_PROBE_OFFSET_FROM_EXTRUDER, M851, or the LCD.
+ * probe Z Offset set with Z_NOZZLE_TO_PROBE_OFFSET, M851, or the LCD.
  * Only integer values >= 1 are valid here.
  *
  * Example: `M851 Z-5` with a CLEARANCE of 4  =>  9mm from bed to nozzle.
@@ -1033,10 +1033,10 @@
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
   // Set the boundaries for probing (where the probe can reach).
-  //#define LEFT_PROBE_BED_POSITION MIN_PROBE_EDGE
-  //#define RIGHT_PROBE_BED_POSITION (X_BED_SIZE - MIN_PROBE_EDGE)
-  //#define FRONT_PROBE_BED_POSITION MIN_PROBE_EDGE
-  //#define BACK_PROBE_BED_POSITION (Y_BED_SIZE - MIN_PROBE_EDGE)
+  //#define LEFT_PROBE_BED_POSITION PROBING_MARGIN
+  //#define RIGHT_PROBE_BED_POSITION (X_BED_SIZE - PROBING_MARGIN)
+  //#define FRONT_PROBE_BED_POSITION PROBING_MARGIN
+  //#define BACK_PROBE_BED_POSITION (Y_BED_SIZE - PROBING_MARGIN)
 
   // Probe along the Y axis, advancing X after each column
   //#define PROBE_Y_FIRST

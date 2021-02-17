@@ -32,7 +32,7 @@
  */
 #ifndef CONFIGURATION_ADV_H
 #define CONFIGURATION_ADV_H
-#define CONFIGURATION_ADV_H_VERSION 010109
+#define CONFIGURATION_ADV_H_VERSION 020007
 
 // @section temperature
 
@@ -379,9 +379,7 @@
 // @section homing
 
 // Homing hits each endstop, retracts by these distances, then does a slower bump.
-#define X_HOME_BUMP_MM 5
-#define Y_HOME_BUMP_MM 5
-#define Z_HOME_BUMP_MM 2
+#define HOMING_BUMP_MM      { 5, 5, 2 } 
 #define HOMING_BUMP_DIVISOR { 2, 2, 4 }  // Re-Bump Speed Divisor (Divides the Homing Feedrate)
 //#define QUICK_HOME                     // If homing includes X and Y, do a diagonal move initially
 
@@ -447,10 +445,10 @@
 // Use Junction Deviation instead of traditional Jerk Limiting
 //
 //#define JUNCTION_DEVIATION
-#if ENABLED(JUNCTION_DEVIATION)
-  #define JUNCTION_DEVIATION_MM 0.02  // (mm) Distance from real junction edge
-#endif
-
+//#if ENABLED(JUNCTION_DEVIATION)
+//  #define JUNCTION_DEVIATION_MM 0.02  // (mm) Distance from real junction edge
+//#endif
+#define JUNCTION_DEVIATION_MM 0.02
 /**
  * Adaptive Step Smoothing increases the resolution of multi-axis moves, particularly at step frequencies
  * below 1kHz (for AVR) or 10kHz (for ARM), where aliasing between axes in multi-axis moves causes audible
